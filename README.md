@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 Swipe&Chill
 
-## Getting Started
+Application web full-stack qui permet à deux personnes de trouver un film à regarder
+ensemble : chacune swipe de son côté dans un salon privé synchronisé, et l'application
+s'arrête dès qu'un même film est liké par les deux.
 
-First, run the development server:
+## Le problème
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Choisir un film à deux prend souvent plus de temps que de le regarder. Swipe&Chill
+transforme ce choix en jeu rapide : plus besoin de proposer ni de justifier ses envies,
+le match se fait tout seul.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Fonctionnement
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Deux joueurs rejoignent le même salon privé depuis leur téléphone.
+2. Chacun voit les films un par un (affiche, note, synopsis, réalisateur, acteurs)
+   et choisit de liker ou disliker.
+3. Dès qu'un film est liké par les deux, la partie s'arrête et le match s'affiche
+   sur les deux écrans.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Choix de conception
 
-## Learn More
+- **Listes de 5 films, mélangées par joueur** : chaque joueur reçoit les mêmes films dans
+  un ordre différent, ce qui évite d'être influencé par les choix de l'autre.
+- **Flux infini côté utilisateur** : une nouvelle liste est générée dès qu'un joueur termine
+  la sienne, sans attendre l'autre.
+- **Aucun doublon dans un salon** : un film déjà proposé n'apparaît plus jamais.
+- **Données légères** : seuls les identifiants de films et les likes sont stockés ;
+  les détails sont récupérés auprès de TMDB à la demande, avec mise en cache.
+- **Secrets protégés** : le token de l'API TMDB n'est utilisé que côté serveur.
 
-To learn more about Next.js, take a look at the following resources:
+## Stack technique
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js** (App Router) et **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **API TMDB** pour les données des films
+- **Supabase** (prévu) pour la synchronisation en temps réel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Avancement
 
-## Deploy on Vercel
+- [x] Initialisation du projet
+- [x] Récupération des films tendances via TMDB (appel côté serveur, avec cache)
+- [ ] Carte de film avec like / dislike
+- [ ] Génération de listes de 5 films sans doublons
+- [ ] Salons privés et synchronisation en temps réel
+- [ ] Détection et affichage du match
+- [ ] Comptes utilisateurs et watchlists
+- [ ] Recherche de films
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lancer le projet
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Installer les dépendances :
+   ```bash
+   npm install
+   ```
+2. Créer un compte sur [TMDB](https://www.themoviedb.org/) et récupérer un *API Read Access Token*.
+3. Copier `.env.example` en `.env.local` et renseigner le token.
+4. Lancer le serveur de développement :
+   ```bash
+   npm run dev
+   ```
+5. Ouvrir http://localhost:3000
+
+## Auteur
+
+David Cunha Rodrigues, étudiant en L3 MIAGE, Université d'Orléans.
